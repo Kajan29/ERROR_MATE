@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "errormate"
+version = "0.1.0"
+description = "Rule-based CLI to run developer commands and detect terminal errors."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "ErrorMate" }
+]
+dependencies = [
+  "typer>=0.12,<1.0",
+  "rich>=13.7,<14.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2,<9.0"
+]
+
+[project.scripts]
+errormate = "errormate.main:main"
+
+[tool.setuptools.packages.find]
+include = ["errormate*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
