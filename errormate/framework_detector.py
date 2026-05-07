@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 from errormate.utils.file_utils import read_json_file
@@ -45,4 +47,25 @@ def detect_framework(project_path: Path) -> str:
     if (project_path / "artisan").exists() and (project_path / "composer.json").exists():
         return "PHP Laravel"
 
-    return "Unknown"
+    # Check for FastAPI (Python) - check before Django to avoid conflicts
+    # First check dependency files
+    requirements_files = ["requirements.txt", "pyproject.toml", "setup.py", "Pipfile", "poetry.lock"]
+    for req_file in requirements_files:
+        req_path = project_path / req_file
+        if req_path.exists():
+            content = req_path.read_text(encoding="utf-8", errors="ignore").lower()
+            if "fastapi" in content or "uvicorn" in content:
+                return "FastAPI"
+    
+    # Check for FastAPI in Python source files (main.py, app.py, etc.)
+    py_files = ["main.py", "app.py", "server.py"]
+    for py_file in py_files:
+        py_path = project_path / py_file
+        if py_path.exists():
+            content = py_path.read_text(encoding="utf-8", errors="ignore").lower()
+            if "from fastapi" in content or "import fastapi" in content:
+                return "FastAPI"
+    
+    # Check for Django (after FastAPI to avoid conflicts)
+    if (project_path / "manage.py").exists():
+        return "Django"

@@ -3,6 +3,17 @@ from errormate.patterns import ErrorPattern
 
 COMMON_PATTERNS = [
     ErrorPattern(
+        error_type="Runtime Error",
+        regex=r"(Traceback \(most recent call last\):)",
+        summary="Runtime exception",
+        meaning="The command stopped because an exception was raised during execution.",
+        fixes=[
+            "Read the final exception line for the root cause.",
+            "Inspect the inputs or state that triggered the exception.",
+            "Add logging around the failing code path if needed.",
+        ],
+    ),
+    ErrorPattern(
         error_type="Port Already Used Error",
         regex=r"(EADDRINUSE|Address already in use|Only one usage of each socket address)",
         summary="Port already in use",
@@ -15,7 +26,7 @@ COMMON_PATTERNS = [
     ),
     ErrorPattern(
         error_type="Database Connection Error",
-        regex=r"(could not connect to server|connection refused.*(5432|3306|1433)|Failed to configure a DataSource|SQLSTATE\[[0-9A-Z]+\]\s*\[[0-9]+\])",
+        regex=r"(could not connect to server|connection refused.*(5432|3306|1433)|Failed to configure a DataSource|SQLSTATE\[[0-9A-Z]+\]\s*\[[0-9]+\]|Access denied for user\s+'.+'@'.+')",
         summary="Database connection failed",
         meaning="The application could not connect to the configured database server.",
         fixes=[
@@ -45,5 +56,30 @@ COMMON_PATTERNS = [
             "Adjust file/folder permissions.",
             "Avoid protected ports or directories when possible.",
         ],
+    ),
+    # Warnings
+    ErrorPattern(
+        error_type="Deprecation Warning",
+        regex=r"(DeprecationWarning|deprecated|will be removed in a future version|no longer supported)",
+        summary="API or feature deprecated",
+        meaning="A feature you are using is deprecated and will be removed in a future version.",
+        fixes=[
+            "Check the documentation for the recommended replacement.",
+            "Update your code to use the new API.",
+            "Set up a migration plan to avoid breaking changes.",
+        ],
+        is_warning=True,
+    ),
+    ErrorPattern(
+        error_type="Unused Variable/Import Warning",
+        regex=r"(unused variable|unused import|assigned but never used|declared but never used)",
+        summary="Unused code detected",
+        meaning="You have defined a variable or import that is not used anywhere in your code.",
+        fixes=[
+            "Remove the unused variable or import.",
+            "Use the variable if it was intended for later use.",
+            "Suppress the warning if it is intentional.",
+        ],
+        is_warning=True,
     ),
 ]

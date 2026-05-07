@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from errormate.patterns import ErrorPattern
 
-from errormate.detectors import django, dotnet, express, laravel, nestjs, nextjs, node, react, spring
+from errormate.detectors import django, dotnet, express, fastapi, laravel, nestjs, nextjs, node, react, spring
 
 
 def get_patterns_for_framework(framework: str) -> list[ErrorPattern]:
@@ -16,6 +18,7 @@ def get_patterns_for_framework(framework: str) -> list[ErrorPattern]:
         ".net": dotnet.get_patterns,
         "java spring boot": spring.get_patterns,
         "php laravel": laravel.get_patterns,
+        "fastapi": fastapi.get_patterns,
     }
 
     getter = mapping.get(key)

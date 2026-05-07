@@ -45,3 +45,8 @@ Thumbs.db
 # Editor settings
 .vscode/
 .idea/
+
+# Playwright
+playwright/node_modules/
+playwright/test-results/
+playwright/playwright-report/

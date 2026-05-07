@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 import re
 
@@ -10,3 +12,4 @@ class ErrorPattern:
     meaning: str
     fixes: list[str]
     flags: int = re.IGNORECASE | re.MULTILINE
+    is_warning: bool = False
